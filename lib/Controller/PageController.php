@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\NoteBook\Controller;
+namespace OCA\NostCloud\Controller;
 
-// use OCA\NoteBook\Db\NoteMapper;
+// use OCA\NostCloud\Db\NoteMapper;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
@@ -11,7 +11,7 @@ use OCP\IConfig;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 
-use OCA\NoteBook\AppInfo\Application;
+use OCA\NostCloud\AppInfo\Application;
 use OCP\PreConditionNotMetException;
 
 class PageController extends Controller
