@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <!--
+    SPDX-FileCopyrightText: rafajchillin <rajosh80+nextcloud@gmail.com>
+    SPDX-License-Identifier: CC0-1.0
+    -->
+    <id>nostcloud</id>
+    <name>Nost Cloud</name>
+    <summary>Nostr for NextCloud</summary>
+    <description><![CDATA[An interface for viewing and managing your Nostr profile with NextCloud]]></description>
+    <version>0.0.1</version>
+    <licence>agpl</licence>
+    <author mail="rajosh80+nextcloud@gmail.com" >rafajchillin</author>
+    <namespace>NostCloud</namespace>
+    <category>social</category>
+    <bugs>https://github.com/Rafie97/Nost-Cloud/issues</bugs>
+    <dependencies>
+        <nextcloud min-version="27" max-version="28"/>
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>Nost Cloud</name>
+            <route>nostcloud.page.index</route>
+        </navigation>
+    </navigations>
+</info>
