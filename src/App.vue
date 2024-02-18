@@ -1,34 +1,24 @@
 <template>
-    <!--
+	<!--
     SPDX-FileCopyrightText: rafajchillin <rajosh80+nextcloud@gmail.com>
     SPDX-License-Identifier: AGPL-3.0-or-later
     -->
 	<div id="content" class="app-nostcloud">
 		<AppNavigation>
-			<AppNavigationNew v-if="!loading"
-				:text="t('nostcloud', 'New note')"
-				:disabled="false"
-				button-id="new-nostcloud-button"
-				button-class="icon-add"
-				@click="newNote" />
+			<AppNavigationNew v-if="!loading" :text="t('nostcloud', 'New note')" :disabled="false"
+				button-id="new-nostcloud-button" button-class="icon-add" @click="newNote" />
 			<ul>
-				<AppNavigationItem v-for="note in notes"
-					:key="note.id"
+				<AppNavigationItem v-for="note in notes" :key="note.id"
 					:title="note.title ? note.title : t('nostcloud', 'New note')"
-					:class="{active: currentNoteId === note.id}"
-					@click="openNote(note)">
+					:class="{ active: currentNoteId === note.id }" @click="openNote(note)">
 					<template slot="actions">
-						<ActionButton v-if="note.id === -1"
-							icon="icon-close"
-							@click="cancelNewNote(note)">
+						<ActionButton v-if="note.id === -1" icon="icon-close" @click="cancelNewNote(note)">
 							{{
-							t('nostcloud', 'Cancel note creation') }}
+								t('nostcloud', 'Cancel note creation') }}
 						</ActionButton>
-						<ActionButton v-else
-							icon="icon-delete"
-							@click="deleteNote(note)">
+						<ActionButton v-else icon="icon-delete" @click="deleteNote(note)">
 							{{
-							 t('nostcloud', 'Delete note') }}
+								t('nostcloud', 'Delete note') }}
 						</ActionButton>
 					</template>
 				</AppNavigationItem>
@@ -36,32 +26,22 @@
 		</AppNavigation>
 		<AppContent>
 			<div v-if="currentNote">
-				<input ref="title"
-					v-model="currentNote.title"
-					type="text"
-					:disabled="updating">
+				<input ref="title" v-model="currentNote.title" type="text" :disabled="updating">
 				<textarea ref="content" v-model="currentNote.content" :disabled="updating" />
-				<input type="button"
-					class="primary"
-					:value="t('nostcloud', 'Save')"
-					:disabled="updating || !savePossible"
+				<input type="button" class="primary" :value="t('nostcloud', 'Save')" :disabled="updating || !savePossible"
 					@click="saveNote">
 			</div>
 			<div v-else id="emptycontent">
 				<div class="icon-file" />
 				<h2>{{
-				 t('nostcloud', 'Create a note to get started') }}</h2>
+					t('nostcloud', 'Create a note to get started') }}</h2>
 			</div>
 		</AppContent>
 	</div>
 </template>
 
 <script>
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
+import { ActionButton, AppContent, AppNavigation, AppNavigationItem, AppNavigationNew } from '@nextcloud/vue'
 
 import '@nextcloud/dialogs/styles/toast.scss'
 import { generateUrl } from '@nextcloud/router'
@@ -221,21 +201,22 @@ export default {
 }
 </script>
 <style scoped>
-	#app-content > div {
-		width: 100%;
-		height: 100%;
-		padding: 20px;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-	}
+#app-content>div {
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
 
-	input[type='text'] {
-		width: 100%;
-	}
+input[type='text'] {
+	width: 100%;
+}
 
-	textarea {
-		flex-grow: 1;
-		width: 100%;
-	}
+textarea {
+	flex-grow: 1;
+	width: 100%;
+}
 </style>
+  
