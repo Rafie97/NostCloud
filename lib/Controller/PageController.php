@@ -2,7 +2,7 @@
 
 namespace OCA\NostCloud\Controller;
 
-// use OCA\NostCloud\Db\NoteMapper;
+use OCA\NostCloud\Db\NoteMapper;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
@@ -23,7 +23,7 @@ class PageController extends Controller
         private IEventDispatcher $eventDispatcher,
         private IInitialState $initialStateService,
         private IConfig $config,
-        //		private NoteMapper $noteMapper,
+        private NoteMapper $noteMapper,
         private ?string $userId
     ) {
         parent::__construct($appName, $request);
@@ -39,12 +39,11 @@ class PageController extends Controller
     public function index(): TemplateResponse
     {
         $this->eventDispatcher->dispatchTyped(new RenderReferenceEvent());
-        // 		try {
-        // 			$notes = $this->noteMapper->getNotesOfUser($this->userId);
-        // 		} catch (\Exception | \Throwable $e) {
-        // 			$notes = [];
-        // 		}
-        $notes = [];
+        try {
+            $notes = $this->noteMapper->getNotesOfUser($this->userId);
+        } catch (\Exception | \Throwable $e) {
+            $notes = [];
+        }
         $selectedNoteId = (int) $this->config->getUserValue($this->userId, Application::APP_ID, 'selected_note_id', '0');
         $state = [
             'notes' => $notes,

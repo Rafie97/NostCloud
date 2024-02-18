@@ -9,7 +9,7 @@
     <name>Nost Cloud</name>
     <summary>Nostr for NextCloud</summary>
     <description><![CDATA[An interface for viewing and managing your Nostr profile with NextCloud]]></description>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <licence>agpl</licence>
     <author mail="rajosh80+nextcloud@gmail.com" >rafajchillin</author>
     <namespace>NostCloud</namespace>

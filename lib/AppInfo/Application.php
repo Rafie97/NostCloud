@@ -14,6 +14,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 class Application extends App implements IBootstrap
 {
 	public const APP_ID = 'nostcloud';
+	public const NOTE_FOLDER_NAME = 'TutorialNotes';
 
 	public function __construct(array $urlParams = [])
 	{
