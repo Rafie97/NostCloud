@@ -1,31 +1,202 @@
 <?php
 
-$requirements = [
-	'apiVersion' => 'v1',
-];
-
-declare(strict_types=1);
-// SPDX-FileCopyrightText: rafajchillin <rajosh80+nextcloud@gmail.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later
-
-/**
- * Create your routes in here. The name is the lowercase name of the controller
- * without the controller part, the stuff after the hash is the method.
- * e.g. page#index -> OCA\NostCloud\Controller\PageController->index()
- *
- * The controller class has to be registered in the application.php file since
- * it's instantiated in there
- */
 return [
 	'routes' => [
-		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'config#setConfig', 'url' => '/config', 'verb' => 'PUT'],
-	],
-	'ocs' => [
-		['name' => 'notes#getUserNotes', 'url' => '/api/{apiVersion}/notes', 'verb' => 'GET', 'requirements' => $requirements],
-		['name' => 'notes#exportUserNote', 'url' => '/api/{apiVersion}/notes/{id}/export', 'verb' => 'GET', 'requirements' => $requirements],
-		['name' => 'notes#addUserNote', 'url' => '/api/{apiVersion}/notes', 'verb' => 'POST', 'requirements' => $requirements],
-		['name' => 'notes#editUserNote', 'url' => '/api/{apiVersion}/notes/{id}', 'verb' => 'PUT', 'requirements' => $requirements],
-		['name' => 'notes#deleteUserNote', 'url' => '/api/{apiVersion}/notes/{id}', 'verb' => 'DELETE', 'requirements' => $requirements],
-	],
+		//////////  P A G E  //////////
+		[
+			'name' => 'page#index',
+			'url' => '/',
+			'verb' => 'GET',
+		],
+		[
+			'name' => 'page#index',
+			'url' => '/welcome',
+			'verb' => 'GET',
+			'postfix' => 'welcome',
+		],
+		[
+			'name' => 'page#create',
+			'url' => '/new',
+			'verb' => 'GET',
+		],
+		[
+			'name' => 'page#index',
+			'url' => '/note/{id}',
+			'verb' => 'GET',
+			'postfix' => 'note',
+			'requirements' => ['id' => '\d+'],
+		],
+
+
+		//////////  N O T E S  //////////
+		[
+			'name' => 'notes#index',
+			'url' => '/notes',
+			'verb' => 'GET',
+		],
+		[
+			'name' => 'notes#dashboard',
+			'url' => '/notes/dashboard',
+			'verb' => 'GET',
+		],
+		[
+			'name' => 'notes#get',
+			'url' => '/notes/{id}',
+			'verb' => 'GET',
+			'requirements' => ['id' => '\d+'],
+		],
+		[
+			'name' => 'notes#create',
+			'url' => '/notes',
+			'verb' => 'POST',
+		],
+		[
+			'name' => 'notes#undo',
+			'url' => '/notes/undo',
+			'verb' => 'POST',
+		],
+		[
+			'name' => 'notes#autotitle',
+			'url' => '/notes/{id}/autotitle',
+			'verb' => 'PUT',
+			'requirements' => ['id' => '\d+'],
+		],
+		[
+			'name' => 'notes#update',
+			'url' => '/notes/{id}',
+			'verb' => 'PUT',
+			'requirements' => ['id' => '\d+'],
+		],
+		[
+			'name' => 'notes#updateProperty',
+			'url' => '/notes/{id}/{property}',
+			'verb' => 'PUT',
+			'requirements' => [
+				'id' => '\d+',
+				'property' => '(modified|title|category|favorite)',
+			],
+		],
+		[
+			'name' => 'notes#destroy',
+			'url' => '/notes/{id}',
+			'verb' => 'DELETE',
+			'requirements' => ['id' => '\d+'],
+		],
+
+		//////////  A T T A C H M E N T S  //////////
+
+		[
+			'name' => 'notes#getAttachment',
+			'url' => '/notes/{noteid}/attachment',
+			'verb' => 'GET',
+			'requirements' => ['noteid' => '\d+'],
+		],
+		[
+			'name' => 'notes#uploadFile',
+			'url' => '/notes/{noteid}/attachment',
+			'verb' => 'POST',
+			'requirements' => ['noteid' => '\d+'],
+		],
+
+		//////////  S E T T I N G S  //////////
+		['name' => 'settings#set', 'url' => '/settings', 'verb' => 'PUT'],
+		['name' => 'settings#get', 'url' => '/settings', 'verb' => 'GET'],
+		['name' => 'settings#migrate', 'url' => '/settings/migrate', 'verb' => 'POST'],
+
+
+		//////////  A P I  //////////
+		[
+			'name' => 'notes_api#index',
+			'url' => '/api/{apiVersion}/notes',
+			'verb' => 'GET',
+			'requirements' => [
+				'apiVersion' => '(v0.2|v1)',
+			],
+		],
+		[
+			'name' => 'notes_api#get',
+			'url' => '/api/{apiVersion}/notes/{id}',
+			'verb' => 'GET',
+			'requirements' => [
+				'apiVersion' => '(v0.2|v1)',
+				'id' => '\d+',
+			],
+		],
+		[
+			'name' => 'notes_api#createAutoTitle',
+			'url' => '/api/{apiVersion}/notes',
+			'verb' => 'POST',
+			'requirements' => [
+				'apiVersion' => '(v0.2)',
+			],
+		],
+		[
+			'name' => 'notes_api#create',
+			'url' => '/api/{apiVersion}/notes',
+			'verb' => 'POST',
+			'requirements' => [
+				'apiVersion' => '(v1)',
+			],
+		],
+		[
+			'name' => 'notes_api#updateAutoTitle',
+			'url' => '/api/{apiVersion}/notes/{id}',
+			'verb' => 'PUT',
+			'requirements' => [
+				'apiVersion' => '(v0.2)',
+				'id' => '\d+',
+			],
+		],
+		[
+			'name' => 'notes_api#update',
+			'url' => '/api/{apiVersion}/notes/{id}',
+			'verb' => 'PUT',
+			'requirements' => [
+				'apiVersion' => '(v1)',
+				'id' => '\d+',
+			],
+		],
+		[
+			'name' => 'notes_api#destroy',
+			'url' => '/api/{apiVersion}/notes/{id}',
+			'verb' => 'DELETE',
+			'requirements' => [
+				'apiVersion' => '(v0.2|v1)',
+				'id' => '\d+',
+			],
+		],
+		[
+			'name' => 'notes_api#setSettings',
+			'url' => '/api/{apiVersion}/settings',
+			'verb' => 'PUT',
+			'requirements' => [
+				'apiVersion' => '(v1)',
+			],
+		],
+		[
+			'name' => 'notes_api#getSettings',
+			'url' => '/api/{apiVersion}/settings',
+			'verb' => 'GET',
+			'requirements' => [
+				'apiVersion' => '(v1)',
+			],
+		],
+		[
+			'name' => 'notes_api#fail',
+			'url' => '/api/{catchAll}',
+			'verb' => 'GET',
+			'requirements' => [
+				'catchAll' => '.*',
+			],
+		],
+		[
+			'name' => 'notes_api#preflighted_cors',
+			'url' => '/api/{apiVersion}/{path}',
+			'verb' => 'OPTIONS',
+			'requirements' => [
+				'apiVersion' => '(v0.2|v1)',
+				'path' => '.+',
+			],
+		],
+	]
 ];

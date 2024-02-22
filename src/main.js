@@ -1,17 +1,17 @@
-/**
- * SPDX-FileCopyrightText: 2018 John Molakvoæ <skjnldsv@protonmail.com>
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-import { generateFilePath } from '@nextcloud/router'
-
 import Vue from 'vue'
-import App from './views/App.vue'
-
-// eslint-disable-next-line
-__webpack_public_path__ = generateFilePath(appName, '', 'js/')
+import App from './App.vue'
+import router from './router.js'
+import store from './store.js'
 
 Vue.mixin({ methods: { t, n } })
 
-const VueApp = Vue.extend(App)
-new VueApp().$mount('#content')
+// Make sure that the filesClient is available in the global scope used by the sidebar
+// FIXME: Can be dropped once Nextcloud 28 is the minimum supported version
+Object.assign(window.OCA.Files, { App: { fileList: { filesClient: OC.Files.getClient() } } }, window.OCA.Files)
+
+export default new Vue({
+	el: '#content',
+	store,
+	router,
+	render: h => h(App),
+})
