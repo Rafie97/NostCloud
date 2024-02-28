@@ -15,15 +15,25 @@ use OCP\Share\Events\BeforeShareCreatedEvent;
 /** @phan-suppress-next-line PhanUnreferencedUseNormal */
 use OCP\Share\IShare;
 
-class Application extends App implements IBootstrap {
-	public const APP_ID = 'notes';
-	public static array $API_VERSIONS = [ '0.2', '1.3' ];
 
-	public function __construct(array $urlParams = []) {
+use swentel\nostr\Event\Event;
+use swentel\nostr\Message\EventMessage;
+use swentel\nostr\Relay\Relay;
+use swentel\nostr\Key\Key;
+
+
+class Application extends App implements IBootstrap
+{
+	public const APP_ID = 'notes';
+	public static array $API_VERSIONS = ['0.2', '1.3'];
+
+	public function __construct(array $urlParams = [])
+	{
 		parent::__construct(self::APP_ID, $urlParams);
 	}
 
-	public function register(IRegistrationContext $context): void {
+	public function register(IRegistrationContext $context): void
+	{
 		$context->registerCapability(Capabilities::class);
 		$context->registerSearchProvider(SearchProvider::class);
 		$context->registerDashboardWidget(DashboardWidget::class);
@@ -31,6 +41,26 @@ class Application extends App implements IBootstrap {
 			BeforeTemplateRenderedEvent::class,
 			BeforeTemplateRenderedListener::class
 		);
+
+		$key = new Key();
+
+		$private_key = $key->generatePrivateKey();
+		$public_key = $key->getPublicKey($private_key);
+
+		$note = new Event();
+		$note->setContent('Hello world');
+		$note->setKind(1);
+
+		$signer = new Sign();
+		$signer->signEvent($note, $private_key);
+
+		$eventMessage = new EventMessage($note);
+
+		$relayUrl = 'wss://relay.damus.io';
+		$relay = new Relay($relayUrl, $eventMessage);
+		$result = $relay->send();
+
+
 		if (\class_exists(BeforeShareCreatedEvent::class)) {
 			$context->registerEventListener(
 				BeforeShareCreatedEvent::class,
@@ -53,7 +83,8 @@ class Application extends App implements IBootstrap {
 		}
 	}
 
-	public function boot(IBootContext $context): void {
+	public function boot(IBootContext $context): void
+	{
 		$context->getAppContainer()->get(NotesHooks::class)->register();
 	}
 }

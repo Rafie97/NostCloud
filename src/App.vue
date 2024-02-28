@@ -1,27 +1,18 @@
 <template>
-	<EditorHint v-if="editorHint" @close="editorHint=false" />
-	<NcContent v-else app-name="notes" :content-class="{loading: loading.notes}">
-		<NcAppNavigation :class="{loading: loading.notes, 'icon-error': error}">
-			<NcAppNavigationNew
-				v-show="!loading.notes && !error"
-				:text="t('notes', 'New note')"
-				@click="onNewNote"
-			>
+	<EditorHint v-if="editorHint" @close="editorHint = false" />
+	<NcContent v-else app-name="notes" :content-class="{ loading: loading.notes }">
+		<NcAppNavigation :class="{ loading: loading.notes, 'icon-error': error }">
+			<NcAppNavigationNew v-show="!loading.notes && !error" :text="t('notes', 'New note')" @click="onNewNote">
 				<PlusIcon slot="icon" :size="20" />
 			</NcAppNavigationNew>
 
 			<template #list>
-				<CategoriesList v-show="!loading.notes"
-					v-if="numNotes"
-				/>
+				<CategoriesList v-show="!loading.notes" v-if="numNotes" />
 			</template>
 
 			<template #footer>
 				<ul class="app-navigation-entry__settings">
-					<NcAppNavigationItem
-						:title="t('notes', 'Notes settings')"
-						@click.prevent="openSettings"
-					>
+					<NcAppNavigationItem :title="t('notes', 'Notes settings')" @click.prevent="openSettings">
 						<CogIcon slot="icon" :size="20" />
 					</NcAppNavigationItem>
 				</ul>
@@ -62,6 +53,9 @@ import EditorHint from './components/Modal/EditorHint.vue'
 import { config } from './config.js'
 import { fetchNotes, noteExists, createNote, undoDeleteNote } from './NotesService.js'
 import store from './store.js'
+
+// eslint-disable-next-line no-console
+console.log("HELOOOOOOOO????????????")
 
 export default {
 	name: 'App',
@@ -117,6 +111,7 @@ export default {
 		window.addEventListener('beforeunload', this.onClose)
 		document.addEventListener('visibilitychange', this.onVisibilityChange)
 		this.loadNotes()
+		console.log("YOOOO MUFUCKA CAN WE GET HERE OR WHAT")
 	},
 
 	destroyed() {

@@ -1,5 +1,7 @@
 import Vue, { set } from 'vue'
 import { copyNote } from '../Util.js'
+import { finalizeEvent, generateSecretKey, getPublicKey, Relay } from 'nostr-tools'
+import { queryProfile } from 'nostr-tools/nip05'
 
 const state = {
 	categories: [],
@@ -74,7 +76,42 @@ const getters = {
 		return result
 	},
 
-	getFilteredNotes: (state, getters, rootState, rootGetters) => () => {
+	getFilteredNotes: (state, getters, rootState, rootGetters) => async () => {
+		// eslint-disable-next-line no-console
+		console.log("HEY MAN WE FILTERED")
+
+		const relay = await Relay.connect('wss://relay.damus.io')
+		const sk = generateSecretKey()
+		const pubKey = getPublicKey(sk)
+
+		relay.subscribe([
+			{
+				kinds: [1],
+				authors: [pubKey, 'npub1l2vyh47mk2p0qlsku7hg0vn29faehy9hy34ygaclpn66ukqp3afqutajft', 'npub1sg6plzptd64u62a878hep2kev88swjh3tw00gjsfl8f237lmu63q0uf63m'],
+			},
+		], {
+			onevent(event) {
+				// eslint-disable-next-line no-console
+				console.log('got event: ', event)
+			},
+		})
+
+		const profile = await queryProfile('jb55.com')
+		// eslint-disable-next-line no-console
+		console.log('YOOOOOO THIS IS A PROFIIIIILE', profile)
+
+		const eventTemplate = {
+			kind: 1,
+			created_at: Math.floor(Date.now() / 1000),
+			tags: [],
+			content: 'hewo world',
+		}
+
+		const signedEvent = finalizeEvent(eventTemplate, sk)
+		await relay.publish(signedEvent)
+
+		relay.close()
+
 		const searchText = rootState.app.searchText.toLowerCase()
 		const notes = state.notes.filter(note => {
 			if (state.selectedCategory !== null
