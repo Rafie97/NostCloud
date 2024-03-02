@@ -16,12 +16,6 @@ use OCP\Share\Events\BeforeShareCreatedEvent;
 use OCP\Share\IShare;
 
 
-use swentel\nostr\Event\Event;
-use swentel\nostr\Message\EventMessage;
-use swentel\nostr\Relay\Relay;
-use swentel\nostr\Key\Key;
-
-
 class Application extends App implements IBootstrap
 {
 	public const APP_ID = 'notes';
@@ -41,24 +35,6 @@ class Application extends App implements IBootstrap
 			BeforeTemplateRenderedEvent::class,
 			BeforeTemplateRenderedListener::class
 		);
-
-		$key = new Key();
-
-		$private_key = $key->generatePrivateKey();
-		$public_key = $key->getPublicKey($private_key);
-
-		$note = new Event();
-		$note->setContent('Hello world');
-		$note->setKind(1);
-
-		$signer = new Sign();
-		$signer->signEvent($note, $private_key);
-
-		$eventMessage = new EventMessage($note);
-
-		$relayUrl = 'wss://relay.damus.io';
-		$relay = new Relay($relayUrl, $eventMessage);
-		$result = $relay->send();
 
 
 		if (\class_exists(BeforeShareCreatedEvent::class)) {
